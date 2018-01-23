@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Resources;
@@ -14,6 +15,7 @@ namespace SchetsEditor
         ISchetsTool huidigeTool;
         Panel paneel;
         bool vast;
+        bool opgeslagen;
         ResourceManager resourcemanager
             = new ResourceManager("SchetsEditor.Properties.Resources"
                                  , Assembly.GetExecutingAssembly()
@@ -49,6 +51,8 @@ namespace SchetsEditor
                                     , new VolRechthoekTool()
                                     , new TekstTool()
                                     , new GumTool()
+                                    , new OvaalTool()
+                                    , new VolOvaalTool()
                                     };
             String[] deKleuren = { "Black", "Red", "Green", "Blue"
                                  , "Yellow", "Magenta", "Cyan" 
@@ -86,6 +90,7 @@ namespace SchetsEditor
             this.maakToolButtons(deTools);
             this.maakAktieButtons(deKleuren);
             this.Resize += this.veranderAfmeting;
+            this.FormClosing += this.sluitMessage;
             this.veranderAfmeting(null, null);
         }
 
@@ -94,7 +99,38 @@ namespace SchetsEditor
             ToolStripMenuItem menu = new ToolStripMenuItem("File");
             menu.MergeAction = MergeAction.MatchOnly;
             menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
+            menu.DropDownItems.Add("Opslaan", null, this.opslaan);
+            menu.DropDownItems.Add("Opslaan als", null, this.opslaanAls);
             menuStrip.Items.Add(menu);
+        }
+        
+
+        //De methode check niet of er onopgeslagen veranderingen zijn, dit is mij niet gelukt.
+        private void sluitMessage(object o, FormClosingEventArgs close)
+        {
+            DialogResult JaNee = MessageBox.Show("Weet je zeker dat je af wilt sluiten?",
+            "Vergeet niet om op te slaan!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (JaNee != DialogResult.Yes)
+            {
+                close.Cancel = true;
+            }
+        }
+        private void opslaan (object sender, EventArgs ea)
+        {
+            Bitmap Afbeelding = new Bitmap(1,1);
+            Afbeelding.Save("c:\\hoi", ImageFormat.Png);
+        }
+        private void opslaanAls(object sender, EventArgs ea)
+        {
+            SaveFileDialog PathKiezer = new SaveFileDialog();
+            PathKiezer.Filter = "PNG-file|*.png|JPG-file|*.jpg|BMP-file|*.bmp";
+            PathKiezer.Title = "Afbeelding opslaan";
+            DialogResult ChosenPath = PathKiezer.ShowDialog();
+            if (ChosenPath == DialogResult.OK)
+            {
+                string FileNaam = PathKiezer.FileName;
+                this.schetscontrol.Schets.opslaan1(FileNaam, PathKiezer.FilterIndex);
+            }
         }
 
         private void maakToolMenu(ICollection<ISchetsTool> tools)

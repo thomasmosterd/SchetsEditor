@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace SchetsEditor
 {
@@ -11,6 +12,16 @@ namespace SchetsEditor
         public Schets()
         {
             bitmap = new Bitmap(1, 1);
+        }
+        public void opslaan1(string FileName, int format = 1)
+        {
+            ImageFormat SaveType;
+            if (format == 1) { SaveType = ImageFormat.Png; }
+            if (format == 2) { SaveType = ImageFormat.Jpeg; }
+            if (format == 3) { SaveType = ImageFormat.Bmp; }
+            else { SaveType = ImageFormat.Png; }
+            bitmap.Save(FileName, SaveType);
+
         }
         public Graphics BitmapGraphics
         {
