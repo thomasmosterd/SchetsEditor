@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Resources;
-
+using System.IO;
 namespace SchetsEditor
 {
     public class SchetsWin : Form
@@ -15,7 +15,6 @@ namespace SchetsEditor
         ISchetsTool huidigeTool;
         Panel paneel;
         bool vast;
-        bool opgeslagen;
         ResourceManager resourcemanager
             = new ResourceManager("SchetsEditor.Properties.Resources"
                                  , Assembly.GetExecutingAssembly()
@@ -115,24 +114,47 @@ namespace SchetsEditor
                 close.Cancel = true;
             }
         }
-        private void opslaan (object sender, EventArgs ea)
-        {
-            Bitmap Afbeelding = new Bitmap(1,1);
-            Afbeelding.Save("c:\\hoi", ImageFormat.Png);
+        //deze functie kijkt of het file al opgeslagen is, zoja dan wordt het opnieuw opgeslagen. Zo nee, dan wordt opslaan als aangeroepen.
+        private void opslaan(object o, EventArgs ea)
+        { 
+            if (this.Text == "")
+                 opslaanAls(o, ea);
+            else this.naarFile();
         }
+        //Deze laat de user de file opslaan met de gewenste naam en type.
         private void opslaanAls(object sender, EventArgs ea)
         {
             SaveFileDialog PathKiezer = new SaveFileDialog();
             PathKiezer.Filter = "PNG-file|*.png|JPG-file|*.jpg|BMP-file|*.bmp";
             PathKiezer.Title = "Afbeelding opslaan";
-            DialogResult ChosenPath = PathKiezer.ShowDialog();
-            if (ChosenPath == DialogResult.OK)
+            if (PathKiezer.ShowDialog() == DialogResult.OK)
             {
-                string FileNaam = PathKiezer.FileName;
-                this.schetscontrol.Schets.opslaan1(FileNaam, PathKiezer.FilterIndex);
+                this.Text = PathKiezer.FileName;
+                this.naarFile();
             }
         }
+        //Deze functie slaat de bitmap op in de gekozen filetype
+        private void naarFile()
+            {
+            Bitmap bitmap = schetscontrol.Schets.bitmap;
+            //Hier wordt gechecked welk bestandstype geselecteerd is.
+            if (this.Text.EndsWith("png"))
+                    bitmap.Save(this.Text, ImageFormat.Png);
 
+            else if (this.Text.EndsWith("jpeg"))
+                     bitmap.Save(this.Text, ImageFormat.Jpeg);
+
+            else if (this.Text.EndsWith("bmp"))
+                bitmap.Save(this.Text, ImageFormat.Bmp);
+
+            else{bitmap.Save(this.Text, ImageFormat.Png);}
+        }
+        //deze methode maakt een bitmap vanhet ingelezen file en geeft deze weer.
+        public void inlezen(string fileName)
+        {
+            Bitmap nieuwbitmap =new Bitmap(fileName);
+            schetscontrol.Schets.bitmap = nieuwbitmap;
+        }
         private void maakToolMenu(ICollection<ISchetsTool> tools)
         {   
             ToolStripMenuItem menu = new ToolStripMenuItem("Tool");

@@ -23,6 +23,7 @@ namespace SchetsEditor
             menu = new ToolStripMenuItem("File");
             menu.DropDownItems.Add("Nieuw", null, this.nieuw);
             menu.DropDownItems.Add("Exit", null, this.afsluiten);
+            menu.DropDownItems.Add("Open", null, this.open);
             menuStrip.Items.Add(menu);
         }
         private void maakHelpMenu()
@@ -38,7 +39,6 @@ namespace SchetsEditor
                            , MessageBoxIcon.Information
                            );
         }
-
         private void nieuw(object sender, EventArgs e)
         {   SchetsWin s = new SchetsWin();
             s.MdiParent = this;
@@ -47,5 +47,19 @@ namespace SchetsEditor
         private void afsluiten(object sender, EventArgs e)
         {   this.Close();
         }
+        //Deze opent een select dialog en geeft de geselecteerde filenaam door aan de inlees methode.
+        private void open(object sender, EventArgs e)
+            {
+            OpenFileDialog dialoog = new OpenFileDialog();
+            dialoog.Filter = "PNG-file|*.png|JPG-file|*.jpg|BMP-file|*.bmp";
+            dialoog.Title = "Afbeelding opslaan";
+            if(dialoog.ShowDialog() == DialogResult.OK)
+                {
+                SchetsWin nieuwfile = new SchetsWin();
+                nieuwfile.MdiParent= this;
+                nieuwfile.inlezen(dialoog.FileName);
+                nieuwfile.Show();
+                }
+            }
     }
 }
