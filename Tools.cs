@@ -117,7 +117,7 @@ namespace SchetsEditor
     //De gevulde ellips tool
     public class VolOvaalTool : OvaalTool
     {
-        public override string ToString(){ return "VolEllips"; }
+        public override string ToString(){ return "bol"; }
 
         public override void Compleet(Graphics g, Point p1, Point p2)
         {

@@ -63,7 +63,17 @@ namespace SchetsEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Ellipse {
+        internal static System.Drawing.Bitmap bol {
+            get {
+                object obj = ResourceManager.GetObject("bol", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ellipse {
             get {
                 object obj = ResourceManager.GetObject("ellipse", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

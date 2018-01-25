@@ -88,4 +88,7 @@
   <ItemGroup>
     <None Include="Resources\Ellipse.bmp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bol.bmp" />
+  </ItemGroup>
 </Project>
