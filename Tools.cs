@@ -107,7 +107,7 @@ namespace SchetsEditor
     //De ellips tool
     public class OvaalTool : TweepuntTool
     {
-        public override string ToString() { return "ellips"; }
+        public override string ToString() { return "ellipse"; }
 
         public override void Bezig(Graphics g, Point p1, Point p2)
         {
